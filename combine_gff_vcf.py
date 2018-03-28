@@ -95,7 +95,8 @@ def combine_cds_vcf(my_cds,my_vcf) :
 def print_table(my_sample_name,my_mut_cds,my_seq) :
     header=['CDS_ID','ALT']
     header+=my_sample_name
-    print "\t".join(header)
+    #print "\t".join(header)
+    sys.stdout.write("\t".join(header)+"\n")
     for m in my_mut_cds :
         #temporary
         #Currently only SNP variant are take into account
@@ -109,7 +110,8 @@ def print_table(my_sample_name,my_mut_cds,my_seq) :
         variant+=get_aa(alt_codon,genetic_table)
         to_print=[ m['cds_id'],variant ]
         to_print+=get_cultivar(m,my_sample_name)
-        print "\t".join(to_print)
+        #print "\t".join(to_print)
+        sys.stdout.write("\t".join(to_print)+"\n")
 #
 #Get codon and alternative codon from postion and sequence
 def get_snp_mutation(my_mut,my_seq) :
@@ -262,21 +264,3 @@ genetic_table=get_genetic_table()
 #print result
 print_table(vcf_sample_name,mut_cds,seq)
 #
-'''
-header=['CDS_ID','POS','ALT']
-header+=vcf_sample_name
-print "\t".join(header)
-#
-to_file={}
-for m in mut_cds :
-    if len(m['REF'])==1 and len(m['ALT'])==1 :
-        (codon,alt_codon)=get_snp_mutation(m,seq)
-        if len(genetic_table.keys())==0 :
-            
-        variant=get_aa(codon,genetic_table)
-        variant+=str(get_alt_pos_on_cds(m,gff3[m['cds_id']]))
-        variant+=get_aa(alt_codon,genetic_table)
-        to_print=[ m['cds_id'],variant ]
-        to_print+=get_cultivar(m,vcf_sample_name)
-        print "\t".join(to_print)
-'''
