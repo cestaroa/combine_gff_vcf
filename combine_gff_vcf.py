@@ -31,7 +31,10 @@ def parse_gff(my_gff_file,my_chr) :
         if l[2]!='CDS' : continue
         if l[0]==my_chr :
             desc=l[8].split(';')
-            parent=desc[1][12:]
+            parent=''
+            for d in desc :
+                if d[0:7]=='Parent=' :
+                    parent=d[7:]
             tmp={'start':int(l[3]),
                  'end':int(l[4]),
                  'strand':l[6],
@@ -82,9 +85,11 @@ def combine_cds_vcf(my_cds,my_vcf) :
     rv=False
     for m in my_cds.values() :
         for i in m :
+            #print(type(my_vcf['POS']),type(i['start']),type(my_vcf['POS']),type(i['end']))
             if my_vcf['POS']>=i['start'] and my_vcf['POS']<=i['end'] :
                 my_dict.update(i)
                 my_dict.update(my_vcf)
+                print(my_dict)
                 rv=True
                 break
             if rv :
